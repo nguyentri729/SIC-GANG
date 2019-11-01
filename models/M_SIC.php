@@ -29,7 +29,35 @@ class M_SIC extends CI_Model {
       }else{
           return false;
       }
-      
+   }
+   function student_info($StudentID){
+
+        $this->db->select('*');
+        $this->db->from('tb_students');
+       // $this->db->join('tb_accesshistories', 'tb_accesshistories.StudentID = tb_students.StudentID', 'left');
+        $this->db->join('tb_studentimgs', 'tb_studentimgs.StudentID = tb_students.StudentID', 'left');
+        $this->db->where('tb_students.StudentID', $StudentID);
+        $query = $this->db->get();
+        #get class
+        if ($query->num_rows() > 0){
+            $info = $query->result_array()[0];
+           // return $info;
+            #get class name and tb_faculties
+            $class_id = $info['ClassID'];
+            $this->db->select('tb_faculties.Name_faculties, tb_classes.Name_classes');
+            $this->db->from('tb_faculties');
+            $this->db->join('tb_classes', 'tb_faculties.FacultyID = tb_classes.FacultyID');
+            $this->db->where('tb_classes.ClassID', $class_id);
+            $class = $this->db->get()->result_array()[0];
+            $info['Name_faculties'] = $class['Name_faculties'];
+            $info['Name_classes'] = $class['Name_classes'];
+            return $info;
+        }else{
+            return [
+                'msg' => 'Khong the get student ID'
+            ];
+        }
+ 
    }
 
 }

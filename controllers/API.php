@@ -7,28 +7,63 @@ class API extends CI_Controller {
         parent::__construct();
         $this->load->model('M_RestAPI', 'm_api');
     }
-    public function index()
+    public function SIC($type = '')
     {
+
+        // if ($this->m_api->check_login() == false){
+        //     $this->m_api->msg = [
+        //         'status' => false,
+        //         'msg' => 'Vui long dang nhap'
+        //     ];
+        //     $this->m_api->return_msg();
+        //     exit();
+        // }
+        
+
         if ($this->input->get('method') != ''){
             //check login success
-            if ($this->m_api->check_login() == false){
-                $this->m_api->msg = [
-                    'status' => false,
-                    'msg' => 'Vui long dang nhap'
-                ];
-                $this->m_api->return_msg();
-                exit();
-            }
+
 
             $method = $this->input->get('method');
             switch($method){
                 case 'insert':  
-                   
+
+                    //them thanh vien
+
                     
+
                     break;
                 case 'delete':
                     break;
                 case 'update':
+                    break;
+                case 'get':
+                    switch ($type) {
+                        case 'student_info':
+                            //set field 
+                            if ($this->input->get('StudentID') == ''){
+                                
+                                $this->m_api->msg = [
+                                    'status' => false,
+                                    'msg' => 'Thieu truong student id'
+                                ];
+                                $this->m_api->return_msg();
+                                exit;
+                            }
+                            $StudentID = $this->input->get('StudentID'); 
+                            
+                            $this->m_api->msg = [
+                                'status' => true,
+                                'data' => $this->sic->student_info($StudentID)
+                            ];
+                            break;
+                        
+                        default:
+                           
+                            break;
+                    }
+                    
+                    
                     break;
                 default:
                     $this->m_api->msg = [
